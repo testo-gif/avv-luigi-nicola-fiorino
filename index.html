@@ -110,6 +110,15 @@ footer{background:var(--navy-dark);color:#fff;padding:36px 5% 24px}
 .modal-box p{font-size:13px;color:var(--text-muted);line-height:1.75;margin-bottom:10px;font-weight:300}
 .modal-close{position:absolute;top:14px;right:18px;font-size:1.3rem;cursor:pointer;color:#ccc;background:none;border:none}
 
+/* FORM CONTATTI */
+.cf-wrap{background:var(--bg-soft);border-radius:var(--r-lg);padding:40px;max-width:680px;margin:32px auto 0;text-align:left}
+.cf-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cf-wrap input,.cf-wrap textarea,.cf-wrap select{width:100%;padding:13px 16px;border:1px solid var(--border);border-radius:var(--r-md);font-family:var(--font-b);font-size:14px;color:var(--text-dark);background:var(--bg);transition:border-color .2s;outline:none;-webkit-appearance:none}
+.cf-wrap input:focus,.cf-wrap textarea:focus,.cf-wrap select:focus{border-color:var(--navy)}
+.cf-wrap textarea{resize:vertical;min-height:110px}
+.cf-note{font-size:11px;color:var(--text-muted);margin-top:10px;text-align:center}
+@media(max-width:600px){.cf-grid{grid-template-columns:1fr}}
+
 /* STICKY */
 .sticky-btn{position:fixed;bottom:24px;right:24px;z-index:5000;padding:12px 20px;border-radius:50px;font-weight:500;font-size:.85rem;color:#fff;box-shadow:0 4px 20px rgba(0,0,0,.25);transition:transform .2s;display:flex;align-items:center;gap:8px;font-family:var(--font-b)}
 .sticky-btn:hover{transform:translateY(-2px)}
@@ -468,6 +477,35 @@ footer{background:var(--navy-dark);color:#fff;padding:36px 5% 24px}
 </div>
 </section>
 
+<!-- FORM CONTATTI -->
+<section id="form-contatto" style="background:var(--bg-soft)">
+<div class="container" style="text-align:center">
+  <p class="section-label">Scrivici</p>
+  <h2 class="section-title">Parliamo del tuo caso</h2>
+  <p class="section-sub" style="margin:10px auto 0">Prima consulenza gratuita. Descrivi la tua situazione e ti ricontatteremo entro 24 ore.</p>
+  <div class="cf-wrap">
+    <form onsubmit="submitForm(event,'')">
+      <div class="cf-grid" style="margin-bottom:12px">
+        <input id="cf-name" type="text" placeholder="Il tuo nome *" required/>
+        <input id="cf-phone" type="tel" placeholder="Telefono *" required/>
+      </div>
+      <select id="cf-service" style="margin-bottom:12px;width:100%;padding:13px 16px;border:1px solid var(--border);border-radius:var(--r-md);font-family:var(--font-b);font-size:14px;color:var(--text-muted);background:var(--bg);outline:none">
+        <option value="">Area di interesse (opzionale)</option>
+        <option>Consulenza Legale</option>
+        <option>Diritto Civile</option>
+        <option>Diritto del Lavoro</option>
+        <option>Diritto Penale</option>
+        <option>Recupero Crediti</option>
+        <option>Contrattualistica</option>
+      </select>
+      <textarea id="cf-msg" placeholder="Descrivi brevemente la tua situazione..." style="margin-bottom:12px;width:100%;padding:13px 16px;border:1px solid var(--border);border-radius:var(--r-md);font-family:var(--font-b);font-size:14px;color:var(--text-dark);background:var(--bg);outline:none;resize:vertical;min-height:110px;transition:border-color .2s" onfocus="this.style.borderColor='var(--navy)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+      <button type="submit" class="btn-primary" style="width:100%;justify-content:center;font-size:15px">Invia messaggio →</button>
+      <p class="cf-note">🔒 I tuoi dati sono protetti dal segreto professionale</p>
+    </form>
+  </div>
+</div>
+</section>
+
 <!-- MAPPA -->
 <section id="mappa" style="padding:0"><div id="map"></div></section>
 
@@ -526,8 +564,22 @@ function toggleFaq(el){
   document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
   if(!isOpen)item.classList.add('open');
 }
+function submitForm(e, service){
+  e.preventDefault();
+  const name = document.getElementById('cf-name').value.trim();
+  const phone = document.getElementById('cf-phone').value.trim();
+  const msg = (document.getElementById('cf-msg')||{}).value||'';
+  const svc = service || ((document.getElementById('cf-service')||{}).value)||'';
+  let text = 'Salve, sono ' + name;
+  if(svc) text += ' e vorrei una consulenza in ' + svc;
+  text += '.';
+  if(msg) text += ' ' + msg;
+  if(phone) text += ' Il mio numero è ' + phone + '.';
+  window.open((window.WA_URL||'https://wa.me/')+'?text='+encodeURIComponent(text),'_blank');
+}
 </script>
 
+<script>window.WA_URL='https://wa.me/393311626088';</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 var map=L.map('map').setView([44.4854839,11.3602167],15);
